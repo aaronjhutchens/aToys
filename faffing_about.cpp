@@ -39,8 +39,16 @@ public:
 	int getHP(){
 		return hitPoints;
 	}
+	void getHP(int pretty){
+		cout << getName() << " has " << getHP() << " hit points\n";
+	}
 	void setHitPoints(int newHP){
 		hitPoints = newHP;
+	}
+	void getStats(){
+		cout << "Name:\t" << getName() << endl;
+		cout << "\tHit Points: " << getHP() << endl;
+		cout << "\tStrength: " << getStr() << "\n\n";
 	}
 
 };
@@ -52,28 +60,49 @@ class duel
 	*/
 {
 private:
-
+	int getRandom(int multiplier){
+		//int var = ;
+		return rand() % multiplier;
+	}
 public:
 	duel(){ srand(time(NULL)); };
 	~duel(){};
-	void attack(player attacker, player defender){
-		//do stuff. Atacky like.
+	void attack(player &attacker, player &defender){
+		//do stuff. Attacky like.
+		int attackVal = getRandom(attacker.getStr());
+		cout << "\nAttacker " << attacker.getName() << " hits " << defender.getName() << " for " << attackVal << " HP\n\n";
+		defender.setHitPoints(defender.getHP() - attackVal);
+		attacker.getHP(1);
+		defender.getHP(1);
 	}
-	int getRandom(int mult){
-		int var = rand() % mult;
-		return var;
+	string battle(player &p1, player &p2){
+		// To the death!
+		string winner;
+
+		while (p1.getHP() > 0 && p2.getHP() > 0){
+			attack(p1, p2);
+			attack(p2, p1);
+		}
+		if (p1.getHP() > 0){
+			winner = p1.getName();
+		}
+		else if (p2.getHP() > 0){
+			winner = p2.getName();
+		}
+		return winner;
 	}
 };
 
 int main()
 {
-	player c1("Cloud", 100, 9999);
-	cout << "Player name: " << c1.getName() << endl;
-	cout << "\tHit Points: " << c1.getHP() << endl;
-	cout << "\tStrength: " << c1.getStr() << endl;
-
+	player c1("Cloud", 100, 7777);
+	player c2("Sephiroth", 50, 9999);
+	c1.getStats();
+	c2.getStats();
 	duel duel;
-	cout << duel.getRandom(100);
+	duel.battle(c1, c2);
+	c1.getStats();
+	c2.getStats();
 
 
 
