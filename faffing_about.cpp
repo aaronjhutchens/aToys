@@ -1,8 +1,7 @@
-// faffing_about.cpp : Defines the entry point for the console application.
-//
-
 #include <iostream>
 #include <string>
+#include <stdlib.h>
+#include <time.h>
 using namespace std;
 
 
@@ -11,7 +10,7 @@ class player
 private:
 	int strength, hitPoints;
 	string charName;
-	
+
 public:
 	~player() {};
 	player(string initName){ charName = initName; };
@@ -24,7 +23,7 @@ public:
 		strength = initStr;
 		hitPoints = initHitPoints;
 	}
-	
+
 	void setName(string newName){
 		charName = newName;
 	}
@@ -46,24 +45,39 @@ public:
 
 };
 
-class duel // Let's callthis a TODO.  I need to learn mediator classes, and that's a ways away for somebody who hasn't done any "serious" programming in a few years (and it really wasn't that serious)
+class duel
+	/*
+	* Ideally this will be a (singleton?) mediator class.
+	* Let's see how it goes.
+	*/
 {
 private:
-	
+
 public:
-	duel(){};
+	duel(){ srand(time(NULL)); };
 	~duel(){};
+	void attack(player attacker, player defender){
+		//do stuff. Atacky like.
+	}
+	int getRandom(int mult){
+		int var = rand() % mult;
+		return var;
+	}
 };
 
 int main()
 {
 	player c1("Cloud", 100, 9999);
-	cout << c1.getName() << endl;
-	cout << c1.getHP() << endl;
-	cout << c1.getStr() << endl;
-	
+	cout << "Player name: " << c1.getName() << endl;
+	cout << "\tHit Points: " << c1.getHP() << endl;
+	cout << "\tStrength: " << c1.getStr() << endl;
+
+	duel duel;
+	cout << duel.getRandom(100);
+
+
+
 	cin.get();
 
 	return 0;
 }
-
