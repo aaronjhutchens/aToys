@@ -46,6 +46,15 @@ public:
 
 };
 
+class duel // Let's callthis a TODO.  I need to learn mediator classes, and that's a ways away for somebody who hasn't done any "serious" programming in a few years (and it really wasn't that serious)
+{
+private:
+	
+public:
+	duel(){};
+	~duel(){};
+};
+
 int main()
 {
 	player c1("Cloud", 100, 9999);
