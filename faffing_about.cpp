@@ -4,7 +4,7 @@
 #include <time.h>
 using namespace std;
 
-enum status { KO, Poisoned, None /*more to come for sure.*/ };
+enum status { KO, Poisoned /*more to come for sure.*/ };
 
 class player
 {
@@ -12,6 +12,19 @@ private:
 	int strength, hitPoints;
 	string charName;
 	status playerStatus;
+
+	void knockOut()
+	{
+		if (getHP() < 0)
+		{
+			hitPoints = 0;
+		}
+		if (getHP() == 0)
+		{
+			setStatus(KO);
+			cout << charName << " has died\n";
+		}
+	}
 
 public:
 	~player() {};
@@ -58,28 +71,23 @@ public:
 	}
 	void getHP(bool pretty)
 	{
-		cout << getName() << " has " << getHP() << " hit points\n";
+		if (pretty == 1)
+		{
+			cout << getName() << " has " << getHP() << " hit points\n";
+		}
 	}
 	void setHP(int newHP)
 	{
 		hitPoints = newHP;
+		knockOut();
 	}
 	void getStats()
 	{
 		cout << "Name:\t" << getName() << endl;
 		cout << "\tHit Points: " << getHP() << endl;
-		cout << "\tStrength: " << getStr() << "\n\n";
+		cout << "\tStrength: " << getStr() << endl;
+		cout << "\tStatus: " << getStatus() << "\n\n";
 	}
-	void knockOut()
-	{
-		if (getHP() <= 0)
-		{
-			setHP(0);
-
-			cout << getName() << " has died\n\n";
-		}
-	}
-
 };
 
 class duel
@@ -101,13 +109,20 @@ public:
 	void attack(player &attacker, player &defender)
 	{
 		//do stuff. Attacky like.
-		int attackVal = getRandom(attacker.getStr());
-		cout << "\nAttacker " << attacker.getName() << " hits " << defender.getName() << " for " << attackVal << " HP\n\n";
-		defender.setHP(defender.getHP() - attackVal);
-		attacker.getHP(1);
-		defender.getHP(1);
+		if (attacker.getHP() > 0 && defender.getHP() > 0)
+		{
+			int attackVal = getRandom(attacker.getStr());
+			cout << "\nAttacker " << attacker.getName() << " hits " << defender.getName() << " for " << attackVal << " HP\n\n";
+			defender.setHP(defender.getHP() - attackVal);
+			/*if (defender.getHP() <= 0)
+			{
+				defender.knockOut();
+			}*/
+			attacker.getHP(1);
+			defender.getHP(1);
+		}
 	}
-	string battle(player &p1, player &p2)
+	void battle(player &p1, player &p2)
 	{
 		// To the death!
 		string winner;
@@ -124,7 +139,7 @@ public:
 		{
 			winner = p2.getName();
 		}
-		return winner;
+		cout << "The winner is: " << winner << endl;
 	}
 };
 
