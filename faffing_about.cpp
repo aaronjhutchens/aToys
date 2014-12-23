@@ -98,13 +98,22 @@ class duel
 	 */
 
 private:
+	duel(){ srand(time(NULL)); };
 	int getRandom(int multiplier)
 	{
 		//int var = ;
 		return rand() % multiplier;
 	}
 public:
-	duel(){ srand(time(NULL)); };
+
+	//static duel* newDuel();
+
+
+	duel & newDuel()
+	{
+		static duel *gDuel = new duel();
+		return *gDuel;
+	}
 	~duel(){};
 	void attack(player &attacker, player &defender)
 	{
@@ -114,10 +123,6 @@ public:
 			int attackVal = getRandom(attacker.getStr());
 			cout << "\nAttacker " << attacker.getName() << " hits " << defender.getName() << " for " << attackVal << " HP\n\n";
 			defender.setHP(defender.getHP() - attackVal);
-			/*if (defender.getHP() <= 0)
-			{
-				defender.knockOut();
-			}*/
 			attacker.getHP(1);
 			defender.getHP(1);
 		}
@@ -149,12 +154,10 @@ int main()
 	player c2("Sephiroth", 50, 9999);
 	c1.getStats();
 	c2.getStats();
-	duel duel;
-	duel.battle(c1, c2);
+	duel sDuel = sDuel.newDuel();
+	sDuel.battle(c1, c2);
 	c1.getStats();
 	c2.getStats();
-
-
 
 	cin.get();
 
