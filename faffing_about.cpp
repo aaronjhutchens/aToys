@@ -6,7 +6,7 @@ using namespace std;
 
 enum status { KO, Poisoned /*more to come for sure.*/ };
 
-class player
+class Player
 {
 private:
 	int strength, hitPoints;
@@ -27,14 +27,14 @@ private:
 	}
 
 public:
-	~player() {};
-	player(string initName){ charName = initName; };
-	player(string initName, int initStr)
+	~Player() {};
+	Player(string initName){ charName = initName; };
+	Player(string initName, int initStr)
 	{
 		charName = initName;
 		strength = initStr;
 	}
-	player(string initName, int initStr, int initHitPoints)
+	Player(string initName, int initStr, int initHitPoints)
 	{
 		charName = initName;
 		strength = initStr;
@@ -90,7 +90,7 @@ public:
 	}
 };
 
-class duel
+class Battle
 {
 	/*
 	 * Ideally this will be a (singleton?) mediator class.
@@ -98,7 +98,7 @@ class duel
 	 */
 
 private:
-	duel(){ srand(time(NULL)); };
+	Battle(){ srand(time(NULL)); };
 	int getRandom(int multiplier)
 	{
 		//int var = ;
@@ -109,28 +109,30 @@ public:
 	//static duel* newDuel();
 
 
-	duel & newDuel()
+	Battle & newBattle()
 	{
-		static duel *gDuel = new duel();
-		return *gDuel;
+		static Battle *globalBattle = new Battle();
+		return *globalBattle;
 	}
-	~duel(){};
-	void attack(player &attacker, player &defender)
+	~Battle(){};
+	void attack(Player &attacker, Player &defender)
 	{
 		//do stuff. Attacky like.
 		if (attacker.getHP() > 0 && defender.getHP() > 0)
 		{
 			int attackVal = getRandom(attacker.getStr());
-			cout << "\nAttacker " << attacker.getName() << " hits " << defender.getName() << " for " << attackVal << " HP\n\n";
+			cout << "\nAttacker " << attacker.getName() << " hits " << defender.getName() << " for " << attackVal << " HP\n";
 			defender.setHP(defender.getHP() - attackVal);
 			attacker.getHP(1);
 			defender.getHP(1);
 		}
 	}
-	void battle(player &p1, player &p2)
+	void duel(Player &p1, Player &p2)
 	{
 		// To the death!
 		string winner;
+
+		cout << p1.getName() << " Vs. " << p2.getName() << " battle to the death" << endl;
 
 		while (p1.getHP() > 0 && p2.getHP() > 0)
 		{
@@ -146,19 +148,36 @@ public:
 		}
 		cout << "The winner is: " << winner << endl;
 	}
+
+	void teamBattle(Player *team1[3], Player *team2[3])
+	{
+		//This is hard.
+	}
 };
 
 int main()
 {
-	player c1("Cloud", 100, 7777);
-	player c2("Sephiroth", 50, 9999);
-	c1.getStats();
-	c2.getStats();
-	duel sDuel = sDuel.newDuel();
-	sDuel.battle(c1, c2);
-	c1.getStats();
-	c2.getStats();
-
+	Battle battle = battle.newBattle();
+	Player * pTeam1[3];
+	
+	pTeam1[0] = new Player("Cloud", 100, 7777);
+	pTeam1[1] = new Player("Yuffie", 80, 8000);
+	pTeam1[2] = new Player("Red13", 90, 7000);
+		
+	
+	Player* pTeam2[3];
+	pTeam2[0] = new Player("Sephiroth", 50, 9999);
+	pTeam2[1] = new Player("Jenova", 60, 9999);
+	pTeam2[2] = new Player("Hojo", 55, 9999);
+	
+	for (int i = 0; i <= 2; i++)
+	{
+		battle.duel(*pTeam1[i], *pTeam2[i]);
+		cin.get();
+	}
+		
+	// battle.duel(c1, c2);
+	cout << "\n\nBattle complete, press enter to quit" << endl;
 	cin.get();
 
 	return 0;
