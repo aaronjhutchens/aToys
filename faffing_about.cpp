@@ -101,7 +101,6 @@ public:
 	~Team() {};
 	Team(string newName, Player * newMembers[], int newSize)
 	{
-		// Populate *members array with Player objects
 		teamName = newName;
 		teamSize = newSize;
 		for (int i = 0; i < teamSize; i++)
@@ -152,7 +151,29 @@ public:
 	}
 	int getTeamHP()
 	{
+		resetTeamHP();
 		return teamHP;
+	}
+	Player randomPlayer()
+	{
+		Player *randPlayer;
+		do
+		{
+			randPlayer = members[rand() % teamSize];
+		} while (randPlayer->getHP() == 0);
+		return *randPlayer;
+	}
+	Player *getPlayer(int i)
+	{
+		return members[i];
+	}
+	void resetTeamHP()
+	{
+		teamHP = 0;
+		for (int i = 0; i < teamSize; i++)
+		{
+			teamHP += members[i]->getHP();
+		}
 	}
 
 };
@@ -216,14 +237,26 @@ public:
 		cout << "The winner is: " << winner << endl;
 	}
 
-	void teamBattle(Team t1, Team t2)
+	void teamBattle(Team &t1, Team &t2)
 	{
-		// Ideally this will allow two teams to battle.  Takes
-		// two pointers to arrays of Player types, and will 
-		// hopefully iterate over each array and attack a member
-		// of the other team at random.
-
+		// Allow two teams to battle.  Each team gets a turn,
+		// during which each member attacks a random member of 
+		// the other team. Hopefully.
 		
+		while (t1.getTeamHP() > 0 && t2.getTeamHP() > 0)
+		{
+			for (int i = 0; i < t1.getSize(); i++)
+			{
+				this->attack(*t1.getPlayer(i), t2.randomPlayer());
+			}
+			for (int i = 0; i < t2.getSize(); i++)
+			{
+				this->attack(*t2.getPlayer(i), t1.randomPlayer());
+			}
+			break;
+		}
+
+		cout << "test" << endl;
 	}
 };
 
@@ -231,25 +264,27 @@ public:
 int main()
 {
 	Battle battle = battle.newBattle();
-	Player * pTeam1[3];
+	Player * pArrTeam1[3];
 	
-	pTeam1[0] = new Player("Cloud", 100, 7777);
-	pTeam1[1] = new Player("Yuffie", 80, 8000);
-	pTeam1[2] = new Player("Red13", 90, 7000);
+	pArrTeam1[0] = new Player("Cloud", 100, 200);
+	pArrTeam1[1] = new Player("Yuffie", 80, 200);
+	pArrTeam1[2] = new Player("Red13", 90, 200);
 	
-	Team *team1 = new Team("Main Characters", pTeam1, 3);
-	team1->getNames();
-	cout << team1->getTeamHP() << endl;
-	
-	Team *team2 = new Team
+	Team *pTeam1 = new Team("Main Characters", pArrTeam1, 3);
+	pTeam1->getNames();
+	cout << pTeam1->getTeamHP() << endl;
+		
+	Team *pTeam2 = new Team
 		(
 		"Another team", 
-		new Player("Sephiroth", 50, 9999), 
-		new Player("Jenova", 60, 9999), 
-		new Player("Hojo", 55, 9999)
+		new Player("Sephiroth", 50, 200), 
+		new Player("Jenova", 60, 200), 
+		new Player("Hojo", 55, 200)
 		);
-	team2->getNames();
-	cout << team2->getTeamHP() << endl;
+	pTeam2->getNames();
+	cout << pTeam2->getTeamHP() << endl;
+
+	battle.teamBattle(*pTeam1, *pTeam2);
 	
 	cout << "\nBattle complete, press enter to quit" << endl;
 	cin.get();
