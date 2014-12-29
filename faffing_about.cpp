@@ -90,6 +90,73 @@ public:
 	}
 };
 
+class Team
+{
+private:
+	int teamHP = 0, teamSize;
+	string teamName;
+	Player *members[];
+
+public:
+	~Team() {};
+	Team(string newName, Player * newMembers[], int newSize)
+	{
+		// Populate *members array with Player objects
+		teamName = newName;
+		teamSize = newSize;
+		for (int i = 0; i < teamSize; i++)
+		{
+			members[i] = newMembers[i];
+			teamHP += members[i]->getHP();
+		}
+	}
+	Team(string newName, Player *p1, Player *p2)
+	{
+		teamName = newName;
+		teamSize = 2;
+		members[0] = p1;
+		members[1] = p2;
+		for (int i = 0; i < teamSize; i++)
+		{
+			teamHP += members[i]->getHP();
+		}
+	}
+	Team(string newName, Player *p1, Player *p2, Player *p3)
+	{
+		teamName = newName;
+		teamSize = 3;
+		members[0] = p1;
+		members[1] = p2;
+		members[2] = p3;
+		for (int i = 0; i < teamSize; i++)
+		{
+			teamHP += members[i]->getHP();
+		}
+	}
+
+
+
+	void getNames()
+	{
+		// List each member name
+		cout << endl;
+		for (int i = 0; i < teamSize; i++)
+		{
+			cout << teamName << "[" << i << "] is: " << members[i]->getName() << endl;
+		}
+		cout << endl;
+	}
+	int getSize()
+	{
+		return teamSize;
+	}
+	int getTeamHP()
+	{
+		return teamHP;
+	}
+
+};
+
 class Battle
 {
 	/*
@@ -149,7 +216,7 @@ public:
 		cout << "The winner is: " << winner << endl;
 	}
 
-	/*void teamBattle(Team t1, Team t2)
+	void teamBattle(Team t1, Team t2)
 	{
 		// Ideally this will allow two teams to battle.  Takes
 		// two pointers to arrays of Player types, and will 
@@ -157,63 +224,9 @@ public:
 		// of the other team at random.
 
 		
-	}*/
+	}
 };
 
-class Team
-{
-private:
-	int teamHP, teamSize;
-	string teamName;
-	Player *members[];
-
-public:
-	~Team() {};
-	Team(string newName, Player * newMembers[], int newSize)
-	{
-		// Populate *members array with Player objects
-		teamName = newName;
-		teamSize = newSize;
-		for ( int i = 0; i < teamSize ; i++)
-		{
-			members[i] = newMembers[i];
-			cout << members[i]->getName() << " is now a member of " << teamName << endl;
-		}
-	}
-	Team(string newName, Player *p1, Player *p2)
-	{
-		teamName = newName;
-		teamSize = 2;
-		members[0] = p1;
-		members[1] = p2;
-	}
-	Team(string newName, Player *p1, Player *p2, Player *p3)
-	{
-		teamName = newName;
-		teamSize = 3;
-		members[0] = p1;
-		members[1] = p2;
-		members[2] = p3;
-	}
-
-
-
-	void getNames()
-	{
-		// List each member name
-		cout << endl;
-		for (int i = 0; i < teamSize; i++)
-		{
-			cout << "members[" << i << "] is: " << members[i]->getName() << endl;
-		}
-		cout << endl;
-	}
-	int getSize()
-	{
-		return teamSize;
-	}
-
-};
 
 int main()
 {
@@ -224,18 +237,21 @@ int main()
 	pTeam1[1] = new Player("Yuffie", 80, 8000);
 	pTeam1[2] = new Player("Red13", 90, 7000);
 	
-	Team *team1 = new Team(pTeam1, 3, "Main Characters");
+	Team *team1 = new Team("Main Characters", pTeam1, 3);
 	team1->getNames();
+	cout << team1->getTeamHP() << endl;
 	
-	Player* pTeam2[3];
-	pTeam2[0] = new Player("Sephiroth", 50, 9999);
-	pTeam2[1] = new Player("Jenova", 60, 9999);
-	pTeam2[2] = new Player("Hojo", 55, 9999);
-
-	Team *team2 = new Team(pTeam2, 3, "Another team");
+	Team *team2 = new Team
+		(
+		"Another team", 
+		new Player("Sephiroth", 50, 9999), 
+		new Player("Jenova", 60, 9999), 
+		new Player("Hojo", 55, 9999)
+		);
 	team2->getNames();
+	cout << team2->getTeamHP() << endl;
 	
-	cout << "\n\nBattle complete, press enter to quit" << endl;
+	cout << "\nBattle complete, press enter to quit" << endl;
 	cin.get();
 
 	return 0;
