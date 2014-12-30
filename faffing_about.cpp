@@ -78,7 +78,7 @@ public:
 	}
 	void setHP(int newHP)
 	{
-		hitPoints = newHP;
+		this->hitPoints = newHP;
 		knockOut();
 	}
 	void getStats()
@@ -159,13 +159,13 @@ public:
 		Player *randPlayer;
 		do
 		{
-			randPlayer = members[rand() % teamSize];
+			randPlayer = this->members[rand() % teamSize];
 		} while (randPlayer->getHP() == 0);
 		return *randPlayer;
 	}
-	Player *getPlayer(int i)
+	Player getPlayer(int i)
 	{
-		return members[i];
+		return *this->members[i];
 	}
 	void resetTeamHP()
 	{
@@ -203,7 +203,7 @@ public:
 		return *globalBattle;
 	}
 	~Battle(){};
-	void attack(Player &attacker, Player &defender)
+	void attack(Player attacker, Player defender)
 	{
 		//do stuff. Attacky like.
 		if (attacker.getHP() > 0 && defender.getHP() > 0)
@@ -237,21 +237,21 @@ public:
 		cout << "The winner is: " << winner << endl;
 	}
 
-	void teamBattle(Team &t1, Team &t2)
+	void teamBattle(Team *t1, Team *t2)
 	{
 		// Allow two teams to battle.  Each team gets a turn,
 		// during which each member attacks a random member of 
 		// the other team. Hopefully.
 		
-		while (t1.getTeamHP() > 0 && t2.getTeamHP() > 0)
+		while (t1->getTeamHP() > 0 && t2->getTeamHP() > 0)
 		{
-			for (int i = 0; i < t1.getSize(); i++)
+			for (int i = 0; i < t1->getSize(); i++)
 			{
-				this->attack(*t1.getPlayer(i), t2.randomPlayer());
+				attack(t1->getPlayer(i), t2->randomPlayer());
 			}
-			for (int i = 0; i < t2.getSize(); i++)
+			for (int i = 0; i < t2->getSize(); i++)
 			{
-				this->attack(*t2.getPlayer(i), t1.randomPlayer());
+				attack(t2->getPlayer(i), t1->randomPlayer());
 			}
 			break;
 		}
@@ -282,10 +282,16 @@ int main()
 		new Player("Hojo", 55, 200)
 		);
 	pTeam2->getNames();
-	cout << pTeam2->getTeamHP() << endl;
-
-	battle.teamBattle(*pTeam1, *pTeam2);
 	
+	//battle.teamBattle(pTeam1, pTeam2);
+	
+	
+	cout << "test1" << endl;
+	battle.duel(pTeam1->randomPlayer(), pTeam2->randomPlayer());
+	cout << "test2" << endl;
+	//battle.duel(pTeam1[1]->getPlayer(), pTeam2[1]->getPlayer())
+	
+
 	cout << "\nBattle complete, press enter to quit" << endl;
 	cin.get();
 
