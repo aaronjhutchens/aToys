@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F44E229E-F49D-44D4-B166-566789CB425B}</ProjectGuid>
+    <ProjectGuid>{AB80EBD1-6579-4318-9A6C-4EC620A955BB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>faffing_about</RootNamespace>
   </PropertyGroup>
