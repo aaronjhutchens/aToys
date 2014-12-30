@@ -157,11 +157,21 @@ public:
 	Player * randomPlayer()
 	{
 		Player *randPlayer;
-		do
+		if (getTeamHP() > 0)
 		{
-			randPlayer = this->members[rand() % teamSize];
-		} while (randPlayer->getHP() == 0);
-		return randPlayer;
+			do
+			{
+				randPlayer = this->members[rand() % teamSize];
+				// If you remove this cout statement it breaks.  Explain that.
+				cout << randPlayer->getName() << "chosen for random" << endl;
+			} while (randPlayer->getHP() == 0);
+			return randPlayer;
+		}
+		else
+		{
+			return NULL;
+		}
+		
 	}
 	Player *getPlayer(int i)
 	{
@@ -254,7 +264,8 @@ public:
 			{
 				attack(*t2.getPlayer(i), *t1.randomPlayer());
 			}
-			//break;
+			cout << t1.getTeamHP() << endl;
+			cout << t2.getTeamHP() << endl;
 		}
 
 		cout << "test" << endl;
@@ -282,7 +293,7 @@ int main()
 		new Player("Jenova", 60, 200), 
 		new Player("Hojo", 55, 200)
 		);
-	pTeam2->getNames();
+	//pTeam2->getNames();
 	
 	battle.teamBattle(*pTeam1, *pTeam2);
 	
