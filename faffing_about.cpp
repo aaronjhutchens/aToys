@@ -159,12 +159,18 @@ public:
 		Player *randPlayer;
 		if (getTeamHP() > 0)
 		{
+			cout << "Starting randPlayer" << endl;
 			do
 			{
-				randPlayer = this->members[rand() % teamSize];
+				cout << "After the 'do'" << endl;
+				int seed = rand() % teamSize;
+				cout << "after the rand" << endl;
+				randPlayer = this->members[seed];
+				cout << "after setting randPlayer" << endl;
 				// If you remove this cout statement it breaks.  Explain that.
-				cout << randPlayer->getName() << "chosen for random" << endl;
+				cout << randPlayer->getName() << " chosen for random" << endl;
 			} while (randPlayer->getHP() == 0);
+			cout << "randPlayer success" << endl;
 			return randPlayer;
 		}
 		else
@@ -175,7 +181,8 @@ public:
 	}
 	Player *getPlayer(int i)
 	{
-		return this->members[i];
+		cout << "getPlayer success" << endl;
+		return members[i];
 	}
 	void resetTeamHP()
 	{
@@ -219,7 +226,7 @@ public:
 		if (attacker.getHP() > 0 && defender.getHP() > 0)
 		{
 			int attackVal = getRandom(attacker.getStr());
-			cout << "\nAttacker " << attacker.getName() << " hits " << defender.getName() << " for " << attackVal << " HP\n";
+			cout << "\n\tAttacker " << attacker.getName() << " hits " << defender.getName() << " for " << attackVal << " HP\n";
 			defender.setHP(defender.getHP() - attackVal);
 			attacker.getHP(1);
 			defender.getHP(1);
@@ -255,18 +262,43 @@ public:
 		
 		while (t1.getTeamHP() > 0 && t2.getTeamHP() > 0)
 		{
-			cout << "test" << endl;
-			for (int i = 0; i < t1.getSize(); i++)
-			{
-				attack(*t1.getPlayer(i), *t2.randomPlayer());
+			cout << "test0" << endl;
+			
+
+
+				for (int i = 0; i < t1.getSize(); i++)
+				{
+					cout << "test1" << endl;
+					if (t2.getTeamHP() > 0)
+					{
+						cout << "test2" << endl;
+						attack(*t1.getPlayer(i), *t2.randomPlayer());
+						cout << "test3" << endl;
+					}
+					else
+					{
+						cout << "Team 1 health: " << t2.getTeamHP() << endl;
+					}
+				}
+			
+
+
+				for (int i = 0; i < t2.getSize(); i++)
+				{
+					cout << "test4" << endl;
+					if (t1.getTeamHP() > 0)
+					{
+						attack(*t2.getPlayer(i), *t1.randomPlayer());
+						cout << "test5" << endl;
+					}
+					else
+					{
+						cout << "Team 2 health: " << t2.getTeamHP() << endl;
+					}
+				}
+				cout << t1.getTeamHP() << endl;
+				cout << t2.getTeamHP() << endl;
 			}
-			for (int i = 0; i < t2.getSize(); i++)
-			{
-				attack(*t2.getPlayer(i), *t1.randomPlayer());
-			}
-			cout << t1.getTeamHP() << endl;
-			cout << t2.getTeamHP() << endl;
-		}
 
 		cout << "test" << endl;
 	}
