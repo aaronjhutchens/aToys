@@ -4,14 +4,17 @@
 #include <time.h>
 using namespace std;
 
-enum status { KO, Poisoned /*more to come for sure.*/ };
+
 
 class Player
 {
 private:
+
+	enum status { KO, Poisoned /*more to come for sure.*/ };
 	int strength, hitPoints;
 	string charName;
 	status playerStatus;
+	
 
 	void knockOut()
 	{
@@ -133,9 +136,12 @@ public:
 		}
 	}
 
+	string getTeamName()
+	{
+		return teamName;
+	}
 
-
-	void getNames()
+	void printNames()
 	{
 		// List each member name
 		cout << endl;
@@ -154,26 +160,19 @@ public:
 		resetTeamHP();
 		return teamHP;
 	}
-	Player * randomPlayer()
+	Player* randomPlayer()
 	{
 		Player *randPlayer;
 		if (getTeamHP() > 0)
 		{
 			do
-			{
-				int seed = rand() % teamSize;
-				randPlayer = this->members[seed];
-				// If you remove this cout statement it breaks.  Explain that.
+			{				
+				randPlayer = this->members[rand() % teamSize];
 			} while (randPlayer->getHP() == 0);
 			return randPlayer;
 		}
-		else
-		{
-			return NULL;
-		}
-		
 	}
-	Player *getPlayer(int i)
+	Player* getPlayer(int i)
 	{
 		return members[i];
 	}
@@ -185,7 +184,6 @@ public:
 			teamHP += members[i]->getHP();
 		}
 	}
-
 };
 
 class Battle
@@ -261,28 +259,19 @@ public:
 					{
 						attack(*t1.getPlayer(i), *t2.randomPlayer());
 					}
-					else
-					{
-						cout << "Team 1 health: " << t2.getTeamHP() << endl;
-					}
 				}
 			
-
-
 				for (int i = 0; i < t2.getSize(); i++)
 				{
 					if (t1.getTeamHP() > 0)
 					{
 						attack(*t2.getPlayer(i), *t1.randomPlayer());
 					}
-					else
-					{
-						cout << "Team 2 health: " << t2.getTeamHP() << endl;
-					}
 				}
-				cout << t1.getTeamHP() << endl;
-				cout << t2.getTeamHP() << endl;
 			}
+		cout << "\nEnding stats:" << endl;
+		cout << t2.getTeamName() << "'s health: " << t2.getTeamHP() << endl;
+		cout << t1.getTeamName() << "'s health: " << t1.getTeamHP() << endl;
 	}
 };
 
@@ -297,20 +286,12 @@ int main()
 	pArrTeam1[2] = new Player("Red13", 90, 200);
 	
 	Team *pTeam1 = new Team("Main Characters", pArrTeam1, 3);
-	pTeam1->getNames();
+	pTeam1->printNames();
 	cout << pTeam1->getTeamHP() << endl;
 		
-	Team *pTeam2 = new Team
-		(
-		"Another team", 
-		new Player("Sephiroth", 50, 200), 
-		new Player("Jenova", 60, 200), 
-		new Player("Hojo", 55, 200)
-		);
-	//pTeam2->getNames();
-	
+	Team *pTeam2 = new Team("Another team", new Player("Sephiroth", 50, 200), new Player("Jenova", 60, 200), new Player("Hojo", 55, 200));
+		
 	battle.teamBattle(*pTeam1, *pTeam2);
-	
 	
 	cout << "\nBattle complete, press enter to quit" << endl;
 	cin.get();
