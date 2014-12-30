@@ -26,6 +26,7 @@ private:
 		{
 			setStatus(KO);
 			cout << charName << " has died\n";
+			cout << this->getStatus() << endl;
 		}
 	}
 
